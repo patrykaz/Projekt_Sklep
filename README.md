@@ -14,7 +14,7 @@ Klient aplikacji może:
 - przegladać hisorie zakupów
 - edytować swoje dane
 
-- Administrator/pracownik aplikacji może:
+Administrator/pracownik aplikacji może:
 - dodawać/edytować/usuwać produkty
 - zegladać użykowników aplikacji
 - symulować realizację zamówienia
