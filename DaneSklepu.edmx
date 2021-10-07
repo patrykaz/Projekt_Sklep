@@ -1,0 +1,436 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DaneSklepuModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Administracja">
+          <Key>
+            <PropertyRef Name="Id_administartora" />
+          </Key>
+          <Property Name="Id_administartora" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Imię" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nazwisko" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Pesel" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Haslo" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Archiwum_kupionego_towaru">
+          <Key>
+            <PropertyRef Name="Id_kupionego_produktu" />
+          </Key>
+          <Property Name="Id_kupionego_produktu" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_klienta" Type="bigint" />
+          <Property Name="Imie_i_nazwisko_klienta" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Nazwa_produktu" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Opis_produktu" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Kategoria" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Ilosc_sztuk" Type="int" Nullable="false" />
+          <Property Name="Cena_zakupu" Type="float" Nullable="false" />
+          <Property Name="Vat" Type="float" Nullable="false" />
+          <Property Name="Data_zakupu" Type="datetime" Nullable="false" />
+          <Property Name="Photo" Type="image" />
+        </EntityType>
+        <EntityType Name="Kategorie">
+          <Key>
+            <PropertyRef Name="Id_kategorii" />
+          </Key>
+          <Property Name="Id_kategorii" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nazwa_kategorii" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Produkty">
+          <Key>
+            <PropertyRef Name="Id_produktu" />
+          </Key>
+          <Property Name="Id_produktu" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nazwa" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Id_kategorii" Type="int" Nullable="false" />
+          <Property Name="Opis" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Ilość" Type="int" Nullable="false" />
+          <Property Name="Cena_netto" Type="float" Nullable="false" />
+          <Property Name="Id_vatu" Type="int" Nullable="false" />
+          <Property Name="Photo" Type="image" />
+        </EntityType>
+        <EntityType Name="Sprzedaż">
+          <Key>
+            <PropertyRef Name="Id_zakupu" />
+          </Key>
+          <Property Name="Id_zakupu" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_klienta" Type="bigint" Nullable="false" />
+          <Property Name="id_produktu" Type="bigint" Nullable="false" />
+          <Property Name="Ilość_sztuk" Type="int" Nullable="false" />
+          <Property Name="Cena_zakupu" Type="float" Nullable="false" />
+          <Property Name="Data_zakupu" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Użytkownicy">
+          <Key>
+            <PropertyRef Name="Id_użytkownika" />
+          </Key>
+          <Property Name="Id_użytkownika" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Imię" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nazwisko" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Płeć" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="E_mail" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefon" Type="int" />
+          <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Hasło" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vat">
+          <Key>
+            <PropertyRef Name="Id_vatu" />
+          </Key>
+          <Property Name="Id_vatu" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Wysokosc_vatu" Type="float" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Produkty_Kategorie">
+          <End Role="Kategorie" Type="Self.Kategorie" Multiplicity="1" />
+          <End Role="Produkty" Type="Self.Produkty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kategorie">
+              <PropertyRef Name="Id_kategorii" />
+            </Principal>
+            <Dependent Role="Produkty">
+              <PropertyRef Name="Id_kategorii" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Produkty_Produkty">
+          <End Role="Vat" Type="Self.Vat" Multiplicity="1" />
+          <End Role="Produkty" Type="Self.Produkty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vat">
+              <PropertyRef Name="Id_vatu" />
+            </Principal>
+            <Dependent Role="Produkty">
+              <PropertyRef Name="Id_vatu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sprzedaż_Sprzedane">
+          <End Role="Produkty" Type="Self.Produkty" Multiplicity="1" />
+          <End Role="Sprzedaż" Type="Self.Sprzedaż" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produkty">
+              <PropertyRef Name="Id_produktu" />
+            </Principal>
+            <Dependent Role="Sprzedaż">
+              <PropertyRef Name="id_produktu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sprzedaż_Użytkownicy">
+          <End Role="Użytkownicy" Type="Self.Użytkownicy" Multiplicity="1" />
+          <End Role="Sprzedaż" Type="Self.Sprzedaż" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Użytkownicy">
+              <PropertyRef Name="Id_użytkownika" />
+            </Principal>
+            <Dependent Role="Sprzedaż">
+              <PropertyRef Name="Id_klienta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DaneSklepuModelStoreContainer">
+          <EntitySet Name="Administracja" EntityType="Self.Administracja" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Archiwum_kupionego_towaru" EntityType="Self.Archiwum_kupionego_towaru" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kategorie" EntityType="Self.Kategorie" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Produkty" EntityType="Self.Produkty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sprzedaż" EntityType="Self.Sprzedaż" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Użytkownicy" EntityType="Self.Użytkownicy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vat" EntityType="Self.Vat" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Produkty_Kategorie" Association="Self.FK_Produkty_Kategorie">
+            <End Role="Kategorie" EntitySet="Kategorie" />
+            <End Role="Produkty" EntitySet="Produkty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Produkty_Produkty" Association="Self.FK_Produkty_Produkty">
+            <End Role="Vat" EntitySet="Vat" />
+            <End Role="Produkty" EntitySet="Produkty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sprzedaż_Sprzedane" Association="Self.FK_Sprzedaż_Sprzedane">
+            <End Role="Produkty" EntitySet="Produkty" />
+            <End Role="Sprzedaż" EntitySet="Sprzedaż" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sprzedaż_Użytkownicy" Association="Self.FK_Sprzedaż_Użytkownicy">
+            <End Role="Użytkownicy" EntitySet="Użytkownicy" />
+            <End Role="Sprzedaż" EntitySet="Sprzedaż" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DaneSklepuModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DaneSklepuEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Kategorie" EntityType="DaneSklepuModel.Kategorie" />
+          <EntitySet Name="Produkty" EntityType="DaneSklepuModel.Produkty" />
+          <AssociationSet Name="FK_Produkty_Kategorie" Association="DaneSklepuModel.FK_Produkty_Kategorie">
+            <End Role="Kategorie" EntitySet="Kategorie" />
+            <End Role="Produkty" EntitySet="Produkty" />
+          </AssociationSet>
+          <EntitySet Name="Sprzedaż" EntityType="DaneSklepuModel.Sprzedaż" />
+          <AssociationSet Name="FK_Sprzedaż_Sprzedane" Association="DaneSklepuModel.FK_Sprzedaż_Sprzedane">
+            <End Role="Produkty" EntitySet="Produkty" />
+            <End Role="Sprzedaż" EntitySet="Sprzedaż" />
+          </AssociationSet>
+          <EntitySet Name="Vat" EntityType="DaneSklepuModel.Vat" />
+          <AssociationSet Name="FK_Produkty_Produkty" Association="DaneSklepuModel.FK_Produkty_Produkty">
+            <End Role="Vat" EntitySet="Vat" />
+            <End Role="Produkty" EntitySet="Produkty" />
+          </AssociationSet>
+          <EntitySet Name="Archiwum_kupionego_towaru" EntityType="DaneSklepuModel.Archiwum_kupionego_towaru" />
+          <EntitySet Name="Użytkownicy" EntityType="DaneSklepuModel.Użytkownicy" />
+          <AssociationSet Name="FK_Sprzedaż_Użytkownicy" Association="DaneSklepuModel.FK_Sprzedaż_Użytkownicy">
+            <End Role="Użytkownicy" EntitySet="Użytkownicy" />
+            <End Role="Sprzedaż" EntitySet="Sprzedaż" />
+          </AssociationSet>
+          <EntitySet Name="Administracja" EntityType="DaneSklepuModel.Administracja" />
+          </EntityContainer>
+        <EntityType Name="Kategorie">
+          <Key>
+            <PropertyRef Name="Id_kategorii" />
+          </Key>
+          <Property Name="Id_kategorii" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nazwa_kategorii" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Produkty" Relationship="DaneSklepuModel.FK_Produkty_Kategorie" FromRole="Kategorie" ToRole="Produkty" />
+        </EntityType>
+        <EntityType Name="Produkty">
+          <Key>
+            <PropertyRef Name="Id_produktu" />
+          </Key>
+          <Property Name="Id_produktu" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nazwa" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Id_kategorii" Type="Int32" Nullable="false" />
+          <Property Name="Opis" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Ilość" Type="Int32" Nullable="false" />
+          <Property Name="Cena_netto" Type="Double" Nullable="false" />
+          <Property Name="Id_vatu" Type="Int32" Nullable="false" />
+          <Property Name="Photo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Kategorie" Relationship="DaneSklepuModel.FK_Produkty_Kategorie" FromRole="Produkty" ToRole="Kategorie" />
+          <NavigationProperty Name="Sprzedaż" Relationship="DaneSklepuModel.FK_Sprzedaż_Sprzedane" FromRole="Produkty" ToRole="Sprzedaż" />
+          <NavigationProperty Name="Vat" Relationship="DaneSklepuModel.FK_Produkty_Produkty" FromRole="Produkty" ToRole="Vat" />
+        </EntityType>
+        <Association Name="FK_Produkty_Kategorie">
+          <End Type="DaneSklepuModel.Kategorie" Role="Kategorie" Multiplicity="1" />
+          <End Type="DaneSklepuModel.Produkty" Role="Produkty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kategorie">
+              <PropertyRef Name="Id_kategorii" />
+            </Principal>
+            <Dependent Role="Produkty">
+              <PropertyRef Name="Id_kategorii" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Sprzedaż">
+          <Key>
+            <PropertyRef Name="Id_zakupu" />
+          </Key>
+          <Property Name="Id_zakupu" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_klienta" Type="Int64" Nullable="false" />
+          <Property Name="id_produktu" Type="Int64" Nullable="false" />
+          <Property Name="Ilość_sztuk" Type="Int32" Nullable="false" />
+          <Property Name="Cena_zakupu" Type="Double" Nullable="false" />
+          <Property Name="Data_zakupu" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Produkty" Relationship="DaneSklepuModel.FK_Sprzedaż_Sprzedane" FromRole="Sprzedaż" ToRole="Produkty" />
+          <NavigationProperty Name="Użytkownicy" Relationship="DaneSklepuModel.FK_Sprzedaż_Użytkownicy" FromRole="Sprzedaż" ToRole="Użytkownicy" />
+        </EntityType>
+        <Association Name="FK_Sprzedaż_Sprzedane">
+          <End Type="DaneSklepuModel.Produkty" Role="Produkty" Multiplicity="1" />
+          <End Type="DaneSklepuModel.Sprzedaż" Role="Sprzedaż" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produkty">
+              <PropertyRef Name="Id_produktu" />
+            </Principal>
+            <Dependent Role="Sprzedaż">
+              <PropertyRef Name="id_produktu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Vat">
+          <Key>
+            <PropertyRef Name="Id_vatu" />
+          </Key>
+          <Property Name="Id_vatu" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Wysokosc_vatu" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Produkty" Relationship="DaneSklepuModel.FK_Produkty_Produkty" FromRole="Vat" ToRole="Produkty" />
+        </EntityType>
+        <Association Name="FK_Produkty_Produkty">
+          <End Type="DaneSklepuModel.Vat" Role="Vat" Multiplicity="1" />
+          <End Type="DaneSklepuModel.Produkty" Role="Produkty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vat">
+              <PropertyRef Name="Id_vatu" />
+            </Principal>
+            <Dependent Role="Produkty">
+              <PropertyRef Name="Id_vatu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Archiwum_kupionego_towaru">
+          <Key>
+            <PropertyRef Name="Id_kupionego_produktu" />
+          </Key>
+          <Property Name="Id_kupionego_produktu" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_klienta" Type="Int64" />
+          <Property Name="Imie_i_nazwisko_klienta" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Nazwa_produktu" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Opis_produktu" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Kategoria" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Ilosc_sztuk" Type="Int32" Nullable="false" />
+          <Property Name="Cena_zakupu" Type="Double" Nullable="false" />
+          <Property Name="Vat" Type="Double" Nullable="false" />
+          <Property Name="Data_zakupu" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Photo" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Użytkownicy">
+          <Key>
+            <PropertyRef Name="Id_użytkownika" />
+          </Key>
+          <Property Name="Id_użytkownika" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Imię" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Nazwisko" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Płeć" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="E_mail" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Telefon" Type="Int32" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Hasło" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Sprzedaż" Relationship="DaneSklepuModel.FK_Sprzedaż_Użytkownicy" FromRole="Użytkownicy" ToRole="Sprzedaż" />
+        </EntityType>
+        <Association Name="FK_Sprzedaż_Użytkownicy">
+          <End Type="DaneSklepuModel.Użytkownicy" Role="Użytkownicy" Multiplicity="1" />
+          <End Type="DaneSklepuModel.Sprzedaż" Role="Sprzedaż" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Użytkownicy">
+              <PropertyRef Name="Id_użytkownika" />
+            </Principal>
+            <Dependent Role="Sprzedaż">
+              <PropertyRef Name="Id_klienta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Administracja">
+          <Key>
+            <PropertyRef Name="Id_administartora" />
+          </Key>
+          <Property Name="Id_administartora" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Imię" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Nazwisko" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Pesel" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Haslo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DaneSklepuModelStoreContainer" CdmEntityContainer="DaneSklepuEntities">
+          <EntitySetMapping Name="Kategorie">
+            <EntityTypeMapping TypeName="DaneSklepuModel.Kategorie">
+              <MappingFragment StoreEntitySet="Kategorie">
+                <ScalarProperty Name="Nazwa_kategorii" ColumnName="Nazwa_kategorii" />
+                <ScalarProperty Name="Id_kategorii" ColumnName="Id_kategorii" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Produkty">
+            <EntityTypeMapping TypeName="DaneSklepuModel.Produkty">
+              <MappingFragment StoreEntitySet="Produkty">
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="Id_vatu" ColumnName="Id_vatu" />
+                <ScalarProperty Name="Cena_netto" ColumnName="Cena_netto" />
+                <ScalarProperty Name="Ilość" ColumnName="Ilość" />
+                <ScalarProperty Name="Opis" ColumnName="Opis" />
+                <ScalarProperty Name="Id_kategorii" ColumnName="Id_kategorii" />
+                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="Id_produktu" ColumnName="Id_produktu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sprzedaż">
+            <EntityTypeMapping TypeName="DaneSklepuModel.Sprzedaż">
+              <MappingFragment StoreEntitySet="Sprzedaż">
+                <ScalarProperty Name="Data_zakupu" ColumnName="Data_zakupu" />
+                <ScalarProperty Name="Cena_zakupu" ColumnName="Cena_zakupu" />
+                <ScalarProperty Name="Ilość_sztuk" ColumnName="Ilość_sztuk" />
+                <ScalarProperty Name="id_produktu" ColumnName="id_produktu" />
+                <ScalarProperty Name="Id_klienta" ColumnName="Id_klienta" />
+                <ScalarProperty Name="Id_zakupu" ColumnName="Id_zakupu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vat">
+            <EntityTypeMapping TypeName="DaneSklepuModel.Vat">
+              <MappingFragment StoreEntitySet="Vat">
+                <ScalarProperty Name="Wysokosc_vatu" ColumnName="Wysokosc_vatu" />
+                <ScalarProperty Name="Id_vatu" ColumnName="Id_vatu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Archiwum_kupionego_towaru">
+            <EntityTypeMapping TypeName="DaneSklepuModel.Archiwum_kupionego_towaru">
+              <MappingFragment StoreEntitySet="Archiwum_kupionego_towaru">
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="Data_zakupu" ColumnName="Data_zakupu" />
+                <ScalarProperty Name="Vat" ColumnName="Vat" />
+                <ScalarProperty Name="Cena_zakupu" ColumnName="Cena_zakupu" />
+                <ScalarProperty Name="Ilosc_sztuk" ColumnName="Ilosc_sztuk" />
+                <ScalarProperty Name="Kategoria" ColumnName="Kategoria" />
+                <ScalarProperty Name="Opis_produktu" ColumnName="Opis_produktu" />
+                <ScalarProperty Name="Nazwa_produktu" ColumnName="Nazwa_produktu" />
+                <ScalarProperty Name="Imie_i_nazwisko_klienta" ColumnName="Imie_i_nazwisko_klienta" />
+                <ScalarProperty Name="Id_klienta" ColumnName="Id_klienta" />
+                <ScalarProperty Name="Id_kupionego_produktu" ColumnName="Id_kupionego_produktu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Użytkownicy">
+            <EntityTypeMapping TypeName="DaneSklepuModel.Użytkownicy">
+              <MappingFragment StoreEntitySet="Użytkownicy">
+                <ScalarProperty Name="Hasło" ColumnName="Hasło" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+                <ScalarProperty Name="E_mail" ColumnName="E_mail" />
+                <ScalarProperty Name="Płeć" ColumnName="Płeć" />
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Imię" ColumnName="Imię" />
+                <ScalarProperty Name="Id_użytkownika" ColumnName="Id_użytkownika" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Administracja">
+            <EntityTypeMapping TypeName="DaneSklepuModel.Administracja">
+              <MappingFragment StoreEntitySet="Administracja">
+                <ScalarProperty Name="Haslo" ColumnName="Haslo" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Pesel" ColumnName="Pesel" />
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Imię" ColumnName="Imię" />
+                <ScalarProperty Name="Id_administartora" ColumnName="Id_administartora" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

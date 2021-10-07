@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="753390055b2e441e950862221d4d52a7" Name="Diagram1">
+        <EntityTypeShape EntityType="DaneSklepuModel.Kategorie" Width="1.5" PointX="6.875" PointY="2.875" />
+        <EntityTypeShape EntityType="DaneSklepuModel.Produkty" Width="1.5" PointX="9.125" PointY="1" />
+        <AssociationConnector Association="DaneSklepuModel.FK_Produkty_Kategorie" />
+        <EntityTypeShape EntityType="DaneSklepuModel.Sprzedaż" Width="1.5" PointX="4.625" PointY="1.375" />
+        <AssociationConnector Association="DaneSklepuModel.FK_Sprzedaż_Sprzedane" />
+        <EntityTypeShape EntityType="DaneSklepuModel.Vat" Width="1.5" PointX="6.875" PointY="0.75" />
+        <AssociationConnector Association="DaneSklepuModel.FK_Produkty_Produkty" />
+        <EntityTypeShape EntityType="DaneSklepuModel.Archiwum_kupionego_towaru" Width="1.5" PointX="0.875" PointY="3.125" />
+        <EntityTypeShape EntityType="DaneSklepuModel.Użytkownicy" Width="1.5" PointX="2.625" PointY="0.5" />
+        <AssociationConnector Association="DaneSklepuModel.FK_Sprzedaż_Użytkownicy" />
+        <EntityTypeShape EntityType="DaneSklepuModel.Administracja" Width="1.5" PointX="0.625" PointY="0.5" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
